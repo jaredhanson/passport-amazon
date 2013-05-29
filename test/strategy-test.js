@@ -20,13 +20,69 @@ vows.describe('AmazonStrategy').addBatch({
     },
   },
   
-  'strategy when loading user profile': {
+  'strategy when loading user profile from api': {
     topic: function() {
       var strategy = new AmazonStrategy({
         clientID: 'ABC123',
         clientSecret: 'secret'
       },
       function() {});
+      
+      // NOTE: This response is received if the user profile is requested from
+      //       the following endpoint:
+      //         https://api.amazon.com/user/profile
+      
+      // mock
+      strategy._oauth2.get = function(url, accessToken, callback) {
+        var body = '{"email":"jaredhanson@example.com","postal_code":"94703-1111","name":"Jared Hanson","user_id":"amzn1.account.XXX00XXXXXXXXXX0XXXXXXXXXXXX"}';
+        
+        callback(null, body, undefined);
+      }
+      
+      return strategy;
+    },
+    
+    'when told to load user profile': {
+      topic: function(strategy) {
+        var self = this;
+        function done(err, profile) {
+          self.callback(err, profile);
+        }
+        
+        process.nextTick(function () {
+          strategy.userProfile('access-token', done);
+        });
+      },
+      
+      'should not error' : function(err, req) {
+        assert.isNull(err);
+      },
+      'should load profile' : function(err, profile) {
+        assert.equal(profile.provider, 'amazon');
+        assert.equal(profile.id, 'amzn1.account.XXX00XXXXXXXXXX0XXXXXXXXXXXX');
+        assert.equal(profile.displayName, 'Jared Hanson');
+        assert.equal(profile.emails[0].value, 'jaredhanson@example.com');
+      },
+      'should set raw property' : function(err, profile) {
+        assert.isString(profile._raw);
+      },
+      'should set json property' : function(err, profile) {
+        assert.isObject(profile._json);
+      },
+    },
+  },
+  
+  'strategy when loading user profile from www': {
+    topic: function() {
+      var strategy = new AmazonStrategy({
+        clientID: 'ABC123',
+        clientSecret: 'secret'
+      },
+      function() {});
+      
+      // NOTE: This response is received if the user profile is requested from
+      //       the following endpoint:
+      //         https://www.amazon.com/ap/user/profile
       
       // mock
       strategy._oauth2.get = function(url, accessToken, callback) {
