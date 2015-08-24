@@ -1,7 +1,7 @@
 var vows = require('vows');
 var assert = require('assert');
 var util = require('util');
-var AmazonStrategy = require('passport-amazon/strategy');
+var AmazonStrategy = require('../lib/strategy');
 
 
 vows.describe('AmazonStrategy').addBatch({
