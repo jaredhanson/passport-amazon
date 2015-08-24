@@ -1,6 +1,6 @@
 {
   "name": "passport-amazon",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Amazon authentication strategy for Passport.",
   "keywords": ["passport", "amazon", "auth", "authn", "authentication", "identity"],
   "repository": {
