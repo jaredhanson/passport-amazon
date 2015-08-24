@@ -21,7 +21,6 @@
   } ],
   "main": "./lib",
   "dependencies": {
-    "pkginfo": "0.2.x",
     "passport-oauth2": "1.x.x"
   },
   "devDependencies": {

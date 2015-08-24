@@ -6,10 +6,4 @@ var amazon = require('..');
 
 vows.describe('passport-amazon').addBatch({
   
-  'module': {
-    'should report a version': function (x) {
-      assert.isString(amazon.version);
-    },
-  },
-  
 }).export(module);
